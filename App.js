@@ -1,21 +1,42 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import "react-native-gesture-handler";
+import * as React from "react";
+import { Button, View, TouchableOpacity, navi } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import { AntDesign } from "@expo/vector-icons";
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+import SignInScreen from "./screens/SignInScreen";
+import SignUpScreen from "./screens/SignUpScreen";
+import HomeScreen from "./screens/HomeScreen";
+import ProfileScreen from "./screens/ProfileScreen";
+import ClassScreen from "./screens/ClassScreen";
+import NotificationScreen from "./screens/NotificationScreen";
+import SettingsScreen from "./screens/SettingsScreen";
+
+const Stack = createStackNavigator();
+
+function MyStack() {
+	return (
+		<Stack.Navigator initialRouteName={SignInScreen}>
+			<Stack.Screen name="SignInScreen" component={SignInScreen} />
+			<Stack.Screen name="SignUpScreen" component={SignUpScreen} />
+			<Stack.Screen
+				name="HomeScreen"
+				options={{ headerShown: false }}
+				component={HomeScreen}
+			/>
+			<Stack.Screen name="ProfileScreen" component={ProfileScreen} />
+			<Stack.Screen name="ClassScreen" component={ClassScreen} />
+			<Stack.Screen name="NotificationScreen" component={NotificationScreen} />
+			<Stack.Screen name="SettingsScreen" component={SettingsScreen} />
+		</Stack.Navigator>
+	);
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default function App() {
+	return (
+		<NavigationContainer>
+			<MyStack />
+		</NavigationContainer>
+	);
+}
