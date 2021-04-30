@@ -6,6 +6,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 
 import data from "../consts/dataClass";
+import { auth } from "../firebase";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -40,7 +41,7 @@ const ClassScreen = ({ route, navigation }) => {
 		</View>
 	);
 
-	const { name, className, jobTitle, image } = route.params.item;
+	//const { name, className, jobTitle, image } = route.params.item;
 	React.useLayoutEffect(() => {
 		navigation.setOptions({
 			title: "Class",
@@ -80,7 +81,7 @@ const ClassScreen = ({ route, navigation }) => {
 	return (
 		<View style={{ flexDirection: "column", height: "100%" }}>
 			<View style={{}}>
-				<Text style={{ alignSelf: "center", fontSize: 24 }}>{className}</Text>
+				<Text style={{ alignSelf: "center", fontSize: 24 }}>sa</Text>
 				<Text
 					style={{
 						borderBottomWidth: 1,
@@ -88,7 +89,7 @@ const ClassScreen = ({ route, navigation }) => {
 						alignSelf: "center",
 					}}
 				>
-					{jobTitle}
+					as
 				</Text>
 			</View>
 			<Text
@@ -99,7 +100,7 @@ const ClassScreen = ({ route, navigation }) => {
 				}}
 			>
 				Teachers{" : "}
-				{name}
+				sa
 			</Text>
 			<View style={{}}>
 				<TouchableOpacity
@@ -111,7 +112,7 @@ const ClassScreen = ({ route, navigation }) => {
 					}}
 				>
 					<Image
-						source={{ uri: image }}
+						source={{ uri: auth?.currentUser?.photoURL }}
 						style={{
 							width: 50,
 							height: 50,

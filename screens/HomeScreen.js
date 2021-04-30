@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
 	StatusBar,
 	Image,
@@ -24,7 +24,8 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import { FlatList } from "react-native-gesture-handler";
 
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
+import { Input } from "react-native-elements/dist/input/Input";
 
 faker.seed(10);
 const DATA = [...Array(100).keys()].map((_, i) => {
@@ -66,6 +67,33 @@ const wait = (timeout) => {
 };
 
 const HomeScreen = ({ navigation }) => {
+	const [chats, setChats] = useState([]);
+
+	const createChat = async () => {
+		await db
+			.collection("chats")
+			.add({
+				chatName: inputClass,
+			})
+			.then(() => {
+				navigation.navigate("ClassScreen");
+			})
+			.catch((error) => alert(error));
+	};
+
+	useEffect(() => {
+		const unsubscribe = db.collection("chats").onSnapshot((snapshot) =>
+			setChats(
+				snapshot.docs.map((doc) => ({
+					id: doc.id,
+					data: doc.data(),
+				}))
+			)
+		);
+		return unsubscribe;
+	}, []);
+
+	const [inputClass, setInputClass] = useState("");
 	const [refreshing, setRefreshing] = React.useState(false);
 	const [countModal, setCountModal] = useState(false);
 	const onPressModal = () =>
@@ -365,11 +393,12 @@ const HomeScreen = ({ navigation }) => {
 									flex: 1,
 								}}
 							>
-								<TextInput
+								<Input
 									backgroundColor="white"
-									maxLength={10}
+									value={inputClass}
+									onChangeText={(text) => setInputClass(text)}
 									style={{
-										width: windowWidth * (3.5 / 10),
+										width: windowWidth * (3 / 10),
 										fontFamily: "monospace",
 										fontWeight: "bold",
 										color: "#191919",
@@ -377,7 +406,7 @@ const HomeScreen = ({ navigation }) => {
 										alignSelf: "flex-end",
 										marginRight: 30,
 									}}
-								></TextInput>
+								></Input>
 							</View>
 						</View>
 						<View
@@ -405,12 +434,12 @@ const HomeScreen = ({ navigation }) => {
 									flex: 1,
 								}}
 							>
-								<TextInput
+								<Input
 									backgroundColor="white"
 									maxLength={10}
 									style={{
 										//flex: 1,
-										width: windowWidth * (3.5 / 10),
+										width: windowWidth * (3 / 10),
 										//alignSelf: "center",
 										fontFamily: "monospace",
 										fontWeight: "bold",
@@ -419,7 +448,7 @@ const HomeScreen = ({ navigation }) => {
 										alignSelf: "flex-end",
 										marginRight: 30,
 									}}
-								></TextInput>
+								></Input>
 							</View>
 						</View>
 						<View
@@ -526,7 +555,7 @@ const HomeScreen = ({ navigation }) => {
 								alignSelf: "center",
 								marginTop: 50,
 							}}
-							onPress={() => navigation.navigate("ClassScreen")}
+							onPress={createChat}
 							onPressOut={onPressModal}
 						>
 							<Text
