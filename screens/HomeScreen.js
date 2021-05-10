@@ -42,6 +42,8 @@ const DATA = [...Array(100).keys()].map((_, i) => {
 	};
 });
 
+const sa = as;
+
 const keyboardVerticalOffset = Platform.OS === "android" ? 40 : 0;
 
 const BG_IMG =
@@ -102,13 +104,11 @@ const HomeScreen = ({ navigation }) => {
 	const [countPublic, setCountPublic] = useState("white");
 	const [countPublicBackground, setCountPublicBackground] = useState("#191919");
 	const [countPrivate, setCountPrivate] = useState("white");
-	const [countPrivateBackground, setCountPrivateBackground] = useState(
-		"#191919"
-	);
+	const [countPrivateBackground, setCountPrivateBackground] =
+		useState("#191919");
 	const [countFollowers, setCountFollowers] = useState("white");
-	const [countFollowersBackground, setCountFollowersBackground] = useState(
-		"#191919"
-	);
+	const [countFollowersBackground, setCountFollowersBackground] =
+		useState("#191919");
 	const onPressPublic = () => {
 		countPublicBackground == "#191919"
 			? setCountPublicBackground("#024b30")
