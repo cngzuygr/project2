@@ -41,7 +41,7 @@ const ClassScreen = ({ route, navigation }) => {
 		</View>
 	);
 
-	//const { name, className, jobTitle, image } = route.params.item;
+	const { name, className, jobTitle, image } = route.params.item;
 	React.useLayoutEffect(() => {
 		navigation.setOptions({
 			title: "Class",
@@ -81,7 +81,7 @@ const ClassScreen = ({ route, navigation }) => {
 	return (
 		<View style={{ flexDirection: "column", height: "100%" }}>
 			<View style={{}}>
-				<Text style={{ alignSelf: "center", fontSize: 24 }}>sa</Text>
+				<Text style={{ alignSelf: "center", fontSize: 24 }}>{className}</Text>
 				<Text
 					style={{
 						borderBottomWidth: 1,
@@ -89,7 +89,7 @@ const ClassScreen = ({ route, navigation }) => {
 						alignSelf: "center",
 					}}
 				>
-					as
+					{jobTitle}
 				</Text>
 			</View>
 			<Text
@@ -100,7 +100,7 @@ const ClassScreen = ({ route, navigation }) => {
 				}}
 			>
 				Teachers{" : "}
-				sa
+				{auth?.currentUser?.displayName}
 			</Text>
 			<View style={{}}>
 				<TouchableOpacity
