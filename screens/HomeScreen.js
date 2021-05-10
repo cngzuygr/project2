@@ -10,44 +10,22 @@ import {
 	RefreshControl,
 	TextInput,
 	TouchableOpacity,
-	ImageBackground,
 	Modal,
-	KeyboardAvoidingView,
 	ScrollView,
 } from "react-native";
-//const { width, height } = Dimensions.get('screen');
-import faker, { name } from "faker";
 import { SimpleLineIcons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
-import { FlatList } from "react-native-gesture-handler";
 
 import { auth, db } from "../firebase";
 import { Input } from "react-native-elements/dist/input/Input";
-
-faker.seed(10);
-const DATA = [...Array(100).keys()].map((_, i) => {
-	return {
-		key: faker.random.uuid(),
-		image: `https://randomuser.me/api/portraits/${faker.helpers.randomize([
-			"women",
-			"men",
-		])}/${faker.random.number(60)}.jpg`,
-		name: faker.name.findName(),
-		jobTitle: faker.name.jobTitle(),
-		email: faker.internet.email(),
-		className: faker.name.jobArea(),
-	};
-});
 
 const keyboardVerticalOffset = Platform.OS === "android" ? 40 : 0;
 
 const BG_IMG =
 	"https://images.pexels.com/photos/5797913/pexels-photo-5797913.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260";
-const PR_IMG =
-	"https://images.pexels.com/photos/1933873/pexels-photo-1933873.jpeg?cs=srgb&dl=pexels-thgusstavo-santana-1933873.jpg&fm=jpg";
 
 const SPACING = 20;
 const AVATAR_SIZE = 70;
@@ -58,9 +36,6 @@ const windowHeight = Dimensions.get("window").height;
 
 const roomCap = 20;
 const activeListeners = 15;
-//const className = "Class";
-const classTitle = "Title";
-const roomType = "Public";
 
 const wait = (timeout) => {
 	return new Promise((resolve) => setTimeout(resolve, timeout));
@@ -69,14 +44,37 @@ const wait = (timeout) => {
 const HomeScreen = ({ navigation }) => {
 	const [chats, setChats] = useState([]);
 
+	const DATA = chats.map(
+		({
+			id,
+			data: { chatAdmin, chatName, chatTitle, chatAdminImage, chatType },
+		}) => {
+			return {
+				key: id,
+				image: chatAdminImage,
+				name: chatAdmin,
+				jobTitle: chatTitle,
+				className: chatName,
+				roomType: chatType,
+			};
+		}
+	);
+
 	const createChat = async () => {
 		await db
 			.collection("chats")
 			.add({
 				chatName: inputClass,
+				chatTitle: inputClassTitle,
+				chatType: inputClassType,
+				chatAdmin: auth?.currentUser?.displayName,
+				chatAdminImage: auth?.currentUser?.photoURL,
 			})
 			.then(() => {
 				navigation.navigate("ClassScreen");
+				setInputClass("");
+				setCountModal(false);
+				setInputClassTitle("");
 			})
 			.catch((error) => alert(error));
 	};
@@ -93,7 +91,9 @@ const HomeScreen = ({ navigation }) => {
 		return unsubscribe;
 	}, []);
 
+	const [inputClassType, setInputClassType] = useState("");
 	const [inputClass, setInputClass] = useState("");
+	const [inputClassTitle, setInputClassTitle] = useState("");
 	const [refreshing, setRefreshing] = React.useState(false);
 	const [countModal, setCountModal] = useState(false);
 	const onPressModal = () =>
@@ -108,6 +108,9 @@ const HomeScreen = ({ navigation }) => {
 	const [countFollowersBackground, setCountFollowersBackground] =
 		useState("#191919");
 	const onPressPublic = () => {
+		setInputClassType("Public");
+		setCountPrivateBackground("#191919");
+		setCountFollowersBackground("#191919");
 		countPublicBackground == "#191919"
 			? setCountPublicBackground("#024b30")
 			: setCountPublicBackground("#191919");
@@ -115,6 +118,9 @@ const HomeScreen = ({ navigation }) => {
 	};
 
 	const onPressPrivate = () => {
+		setInputClassType("Private");
+		setCountPublicBackground("#191919");
+		setCountFollowersBackground("#191919");
 		countPrivateBackground == "#191919"
 			? setCountPrivateBackground("#024b30")
 			: setCountPrivateBackground("#191919");
@@ -124,6 +130,9 @@ const HomeScreen = ({ navigation }) => {
 	};
 
 	const onPressFollowers = () => {
+		setInputClassType("Followers Only");
+		setCountPrivateBackground("#191919");
+		setCountPublicBackground("#191919");
 		countFollowersBackground == "#191919"
 			? setCountFollowersBackground("#024b30")
 			: setCountFollowersBackground("#191919");
@@ -295,7 +304,7 @@ const HomeScreen = ({ navigation }) => {
 											</View>
 											<View style={{ justifyContent: "space-between" }}>
 												<SimpleLineIcons name="lock-open" size={16}>
-													{roomType}
+													{item.roomType}
 												</SimpleLineIcons>
 												<Text style={{ alignSelf: "flex-end" }}>
 													{activeListeners}/{roomCap}
@@ -394,6 +403,7 @@ const HomeScreen = ({ navigation }) => {
 								<Input
 									backgroundColor="white"
 									value={inputClass}
+									maxLength={15}
 									onChangeText={(text) => setInputClass(text)}
 									style={{
 										width: windowWidth * (3 / 10),
@@ -434,7 +444,9 @@ const HomeScreen = ({ navigation }) => {
 							>
 								<Input
 									backgroundColor="white"
-									maxLength={10}
+									maxLength={50}
+									value={inputClassTitle}
+									onChangeText={(text) => setInputClassTitle(text)}
 									style={{
 										//flex: 1,
 										width: windowWidth * (3 / 10),
@@ -554,7 +566,6 @@ const HomeScreen = ({ navigation }) => {
 								marginTop: 50,
 							}}
 							onPress={createChat}
-							onPressOut={onPressModal}
 						>
 							<Text
 								style={{
@@ -624,7 +635,6 @@ const styles = StyleSheet.create({
 	},
 	hand: {
 		marginLeft: 20,
-		//backgroundColor: 'red',
 		borderRadius: 5,
 		alignSelf: "center",
 	},

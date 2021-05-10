@@ -1,4 +1,3 @@
-import { name } from "faker";
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, Image, Dimensions } from "react-native";
 import { FlatList, ScrollView } from "react-native-gesture-handler";
@@ -11,7 +10,7 @@ import { auth } from "../firebase";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-const ClassScreen = ({ route, navigation }) => {
+const ClassScreen = ({ navigation }) => {
 	const Item = ({ image }) => (
 		<View style={{}}>
 			<TouchableOpacity
@@ -41,7 +40,6 @@ const ClassScreen = ({ route, navigation }) => {
 		</View>
 	);
 
-	const { name, className, jobTitle, image } = route.params.item;
 	React.useLayoutEffect(() => {
 		navigation.setOptions({
 			title: "Class",
@@ -68,9 +66,8 @@ const ClassScreen = ({ route, navigation }) => {
 			: setCountMic("microphone");
 
 	const [countHand, setCountHand] = useState("#2f4f4f");
-	const [countClassListenersBorder, setCountClassListenersBorder] = useState(
-		"white"
-	);
+	const [countClassListenersBorder, setCountClassListenersBorder] =
+		useState("white");
 
 	const onPressHand = () => {
 		countHand == "#2f4f4f" ? setCountHand("red") : setCountHand("#2f4f4f"),
@@ -81,7 +78,7 @@ const ClassScreen = ({ route, navigation }) => {
 	return (
 		<View style={{ flexDirection: "column", height: "100%" }}>
 			<View style={{}}>
-				<Text style={{ alignSelf: "center", fontSize: 24 }}>{className}</Text>
+				<Text style={{ alignSelf: "center", fontSize: 24 }}>sa</Text>
 				<Text
 					style={{
 						borderBottomWidth: 1,
@@ -89,7 +86,7 @@ const ClassScreen = ({ route, navigation }) => {
 						alignSelf: "center",
 					}}
 				>
-					{jobTitle}
+					sa
 				</Text>
 			</View>
 			<Text
