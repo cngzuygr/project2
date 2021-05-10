@@ -42,8 +42,6 @@ const DATA = [...Array(100).keys()].map((_, i) => {
 	};
 });
 
-const sa = as;
-
 const keyboardVerticalOffset = Platform.OS === "android" ? 40 : 0;
 
 const BG_IMG =
