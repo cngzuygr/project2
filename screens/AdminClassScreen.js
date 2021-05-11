@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, Image, Dimensions } from "react-native";
 import { FlatList, ScrollView } from "react-native-gesture-handler";
 import { Ionicons } from "@expo/vector-icons";
@@ -10,8 +10,10 @@ import { auth, db } from "../firebase";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-const ClassScreen = ({ route, navigation }) => {
-	const { name, className, classTitle, image, key } = route.params.item;
+const AdminClassScreen = ({ route, navigation }) => {
+	//const id = route.params;
+
+	//console.log({ id });
 
 	const Item = ({ image }) => (
 		<View style={{}}>
@@ -80,7 +82,7 @@ const ClassScreen = ({ route, navigation }) => {
 	return (
 		<View style={{ flexDirection: "column", height: "100%" }}>
 			<View style={{}}>
-				<Text style={{ alignSelf: "center", fontSize: 24 }}>{className}</Text>
+				<Text style={{ alignSelf: "center", fontSize: 24 }}>sa</Text>
 				<Text
 					style={{
 						borderBottomWidth: 1,
@@ -88,7 +90,7 @@ const ClassScreen = ({ route, navigation }) => {
 						alignSelf: "center",
 					}}
 				>
-					{classTitle}
+					sa
 				</Text>
 			</View>
 			<Text
@@ -99,7 +101,7 @@ const ClassScreen = ({ route, navigation }) => {
 				}}
 			>
 				Teachers{" : "}
-				{name}
+				{auth?.currentUser?.displayName}
 			</Text>
 			<View style={{}}>
 				<TouchableOpacity
@@ -111,7 +113,7 @@ const ClassScreen = ({ route, navigation }) => {
 					}}
 				>
 					<Image
-						source={{ uri: image }}
+						source={{ uri: auth?.currentUser?.photoURL }}
 						style={{
 							width: 50,
 							height: 50,
@@ -249,4 +251,4 @@ const ClassScreen = ({ route, navigation }) => {
 	);
 };
 
-export default ClassScreen;
+export default AdminClassScreen;

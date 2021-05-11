@@ -12,6 +12,7 @@ import ProfileScreen from "./screens/ProfileScreen";
 import ClassScreen from "./screens/ClassScreen";
 import NotificationScreen from "./screens/NotificationScreen";
 import SettingsScreen from "./screens/SettingsScreen";
+import AdminClassScreen from "./screens/AdminClassScreen";
 
 const Stack = createStackNavigator();
 
@@ -27,6 +28,7 @@ function MyStack() {
 			/>
 			<Stack.Screen name="ProfileScreen" component={ProfileScreen} />
 			<Stack.Screen name="ClassScreen" component={ClassScreen} />
+			<Stack.Screen name="AdminClassScreen" component={AdminClassScreen} />
 			<Stack.Screen name="NotificationScreen" component={NotificationScreen} />
 			<Stack.Screen name="SettingsScreen" component={SettingsScreen} />
 		</Stack.Navigator>

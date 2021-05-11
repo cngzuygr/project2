@@ -42,6 +42,10 @@ const wait = (timeout) => {
 };
 
 const HomeScreen = ({ navigation }) => {
+	const onPressClass = (item) => {
+		navigation.navigate("ClassScreen", { item });
+	};
+
 	const [chats, setChats] = useState([]);
 
 	const DATA = chats.map(
@@ -53,7 +57,7 @@ const HomeScreen = ({ navigation }) => {
 				key: id,
 				image: chatAdminImage,
 				name: chatAdmin,
-				jobTitle: chatTitle,
+				classTitle: chatTitle,
 				className: chatName,
 				roomType: chatType,
 			};
@@ -67,11 +71,12 @@ const HomeScreen = ({ navigation }) => {
 				chatName: inputClass,
 				chatTitle: inputClassTitle,
 				chatType: inputClassType,
+				chatAdminUid: auth?.currentUser?.uid,
 				chatAdmin: auth?.currentUser?.displayName,
 				chatAdminImage: auth?.currentUser?.photoURL,
 			})
 			.then(() => {
-				navigation.navigate("ClassScreen");
+				navigation.navigate("AdminClassScreen");
 				setInputClass("");
 				setCountModal(false);
 				setInputClassTitle("");
@@ -91,7 +96,7 @@ const HomeScreen = ({ navigation }) => {
 		return unsubscribe;
 	}, []);
 
-	const [inputClassType, setInputClassType] = useState("");
+	const [inputClassType, setInputClassType] = useState("Public");
 	const [inputClass, setInputClass] = useState("");
 	const [inputClassTitle, setInputClassTitle] = useState("");
 	const [refreshing, setRefreshing] = React.useState(false);
@@ -260,9 +265,7 @@ const HomeScreen = ({ navigation }) => {
 
 						return (
 							<View>
-								<TouchableOpacity
-									onPress={() => navigation.navigate("ClassScreen", { item })}
-								>
+								<TouchableOpacity onPress={() => onPressClass(item)}>
 									<Animated.View
 										style={{
 											flexDirection: "column",
@@ -280,7 +283,7 @@ const HomeScreen = ({ navigation }) => {
 												<Text style={{ fontSize: 22, fontWeight: "700" }}>
 													{item.className}
 												</Text>
-												<Text style={{ opacity: 0.7 }}>{item.jobTitle}</Text>
+												<Text style={{ opacity: 0.7 }}>{item.classTitle}</Text>
 												<View style={{ flexDirection: "row" }}>
 													<Image
 														source={{ uri: item.image }}
