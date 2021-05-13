@@ -19,6 +19,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 
+import firebase from "firebase/app";
 import { auth, db } from "../firebase";
 import { Input } from "react-native-elements/dist/input/Input";
 
@@ -43,7 +44,20 @@ const wait = (timeout) => {
 
 const HomeScreen = ({ navigation }) => {
 	const onPressClass = (item) => {
-		navigation.navigate("ClassScreen", { item });
+		addListenersArray(item).then(() => {
+			navigation.navigate("ClassScreen", { item });
+		});
+	};
+
+	const addListenersArray = async (item) => {
+		await db
+			.collection("chats")
+			.doc(item.key)
+			.update({
+				chatListeners: firebase.firestore.FieldValue.arrayUnion(
+					auth?.currentUser?.uid
+				),
+			});
 	};
 
 	const [chats, setChats] = useState([]);
@@ -74,6 +88,7 @@ const HomeScreen = ({ navigation }) => {
 				chatAdminUid: auth?.currentUser?.uid,
 				chatAdmin: auth?.currentUser?.displayName,
 				chatAdminImage: auth?.currentUser?.photoURL,
+				chatListeners: [],
 			})
 			.then(() => {
 				navigation.navigate("AdminClassScreen");

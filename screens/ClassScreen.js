@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, Image, Dimensions } from "react-native";
 import { FlatList, ScrollView } from "react-native-gesture-handler";
 import { Ionicons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 
+import firebase from "firebase/app";
 import data from "../consts/dataClass";
 import { auth, db } from "../firebase";
 
@@ -11,7 +12,48 @@ const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 const ClassScreen = ({ route, navigation }) => {
+	const [chats, setChats] = useState([]);
+	console.log("==================================");
 	const { name, className, classTitle, image, key } = route.params.item;
+	//const array = new Array();
+	const onPressLeave = async (key) => {
+		await db
+			.collection("chats")
+			.doc(key)
+			.update({
+				chatListeners: firebase.firestore.FieldValue.arrayRemove(
+					auth?.currentUser?.uid
+				),
+			})
+			.then(() => {
+				navigation.navigate("HomeScreen");
+			});
+	};
+
+	const getUsersInChat = async (key) => {
+		//console.log(key);
+		await db
+			.collection("chats")
+			.doc(key)
+			.get()
+			.then(function (doc) {
+				if (doc.exists) {
+					//console.log(doc.get("chatListeners"));
+					setChats(doc.get("chatListeners"));
+					console.log(chats);
+				} else {
+					// doc.data() will be undefined in this case
+					console.log("No such document!");
+				}
+			})
+			.catch(function (error) {
+				console.log("Error getting document:", error);
+			});
+	};
+
+	// Create a query against the collection
+
+	//getUsersInChat(key);
 
 	const Item = ({ image }) => (
 		<View style={{}}>
@@ -144,6 +186,7 @@ const ClassScreen = ({ route, navigation }) => {
 					backgroundColor: "#DDDDDD",
 				}}
 			>
+				<Text>{chats}</Text>
 				<View
 					style={{
 						height: windowHeight * (1 / 10),
@@ -211,6 +254,7 @@ const ClassScreen = ({ route, navigation }) => {
 						/>
 					</TouchableOpacity>
 					<TouchableOpacity
+						onPress={() => onPressLeave(key)}
 						style={{
 							alignItems: "center",
 							alignSelf: "center",

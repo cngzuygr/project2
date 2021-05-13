@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StatusBar } from "react-native";
 import { KeyboardAvoidingView } from "react-native";
 import { StyleSheet, View } from "react-native";
 import { Input, Button, Text } from "react-native-elements";
-import { auth } from "../firebase";
+
+import firebase from "firebase/app";
+import { auth, db } from "../firebase";
 
 const SignUpScreen = ({ navigation }) => {
 	const [name, setName] = useState("");
@@ -26,7 +28,22 @@ const SignUpScreen = ({ navigation }) => {
 						"https://images.pexels.com/photos/2869076/pexels-photo-2869076.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
 				});
 			})
+			.then(() => {
+				createUser();
+			})
 			.catch((error) => alert(error.message));
+	};
+
+	const createUser = async () => {
+		await db
+			.collection("users")
+			.add({
+				displayName: name,
+				userImage: imageUrl,
+				userEmail: email,
+				userUid: auth?.currentUser?.uid,
+			})
+			.catch((error) => alert(error));
 	};
 
 	return (
