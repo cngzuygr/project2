@@ -51,8 +51,6 @@ const ClassScreen = ({ route, navigation }) => {
 			});
 	};
 
-	// Create a query against the collection
-
 	//getUsersInChat(key);
 
 	const Item = ({ image }) => (
