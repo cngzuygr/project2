@@ -39,8 +39,8 @@ const ClassScreen = ({ route, navigation }) => {
 			.then(function (doc) {
 				if (doc.exists) {
 					//console.log(doc.get("chatListeners"));
-					setChats(doc.get("chatListeners"));
-					console.log(chats);
+					//setChats(doc.get("chatListeners"));
+					//console.log(chats);
 				} else {
 					// doc.data() will be undefined in this case
 					console.log("No such document!");

@@ -43,6 +43,7 @@ const wait = (timeout) => {
 };
 
 const HomeScreen = ({ navigation }) => {
+	console.log("Sa");
 	const onPressClass = (item) => {
 		addListenersArray(item).then(() => {
 			navigation.navigate("ClassScreen", { item });
